@@ -11,6 +11,7 @@ import io.opentelemetry.android.instrumentation.AndroidInstrumentationLoader
 import io.opentelemetry.android.instrumentation.common.EventAttributesExtractor
 import io.opentelemetry.android.instrumentation.crash.CrashDetails
 import io.opentelemetry.android.instrumentation.crash.CrashReporterInstrumentation
+import io.opentelemetry.android.instrumentation.crash.CrashReportingMode
 
 /**
  * Type-safe config DSL that controls how crash reporting instrumentation should behave.
@@ -36,5 +37,17 @@ class CrashReporterConfiguration internal constructor(
         } else {
             config.suppressInstrumentation(crashReporterInstrumentation.name)
         }
+    }
+
+    /**
+     * Sets the crash reporting mode to control how crashes are emitted.
+     *
+     * @param mode The [CrashReportingMode] to use:
+     *   - [CrashReportingMode.LOGS_ONLY] - Default, emits crashes as log records
+     *   - [CrashReportingMode.SPANS_ONLY] - Emits crashes as spans (for backends like AppSignal)
+     *   - [CrashReportingMode.LOGS_AND_SPANS] - Emits both logs and spans
+     */
+    fun crashReportingMode(mode: CrashReportingMode) {
+        crashReporterInstrumentation.setCrashReportingMode(mode)
     }
 }
