@@ -25,24 +25,6 @@ android {
         }
     }
 
-    androidComponents {
-        onVariants {
-            if (it.buildType == "release") { // The one we choose to release
-                project.tasks.register("createReleaseBuild", Copy::class) {
-                    from(it.artifacts.get(com.android.build.api.artifact.SingleArtifact.AAR))
-                    into(project.layout.buildDirectory.dir("outputs/aar"))
-                    rename(".+", "opentelemetry-android.aar")
-                }
-            }
-        }
-    }
-
-    project.afterEvaluate {
-        tasks.named("assembleRelease") {
-            finalizedBy("createReleaseBuild")
-        }
-    }
-
     testOptions {
         unitTests.isReturnDefaultValues = true
         unitTests.isIncludeAndroidResources = true
